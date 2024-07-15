@@ -1,11 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HousesService } from './houses.service';
-
-const houseMock = {
-  name: 'houseName',
-  motto: 'houseMotto',
-  headOfHouse: 'houseHead',
-};
+import { houseMock } from './house-mock';
 
 describe('HousesService', () => {
   let service: HousesService;
