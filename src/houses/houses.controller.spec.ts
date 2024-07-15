@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HousesController } from './houses.controller';
 import { HousesService } from './houses.service';
+import { houseMock } from './house-mock';
 
 describe('HousesController', () => {
   let controller: HousesController;
@@ -21,7 +22,11 @@ describe('HousesController', () => {
   });
 
   it('should get houses', () => {
+    const findAllMock = () => {
+      return [houseMock];
+    };
+    jest.spyOn(service, 'findAll').mockImplementation(findAllMock);
     const houses = controller.getHouses();
-    expect(houses).resolves([houseMock]);
+    expect(houses).toStrictEqual([houseMock]);
   });
 });
