@@ -1,6 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HousesService } from './houses.service';
 
+const houseMock = {
+  name: 'houseName',
+  motto: 'houseMotto',
+  headOfHouse: 'houseHead',
+};
+
 describe('HousesService', () => {
   let service: HousesService;
 
@@ -14,5 +20,10 @@ describe('HousesService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  it('should return houses', () => {
+    const results = service.findAll();
+    expect(results).toStrictEqual([houseMock]);
   });
 });
