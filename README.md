@@ -32,6 +32,17 @@
 $ npm install
 ```
 
+## DB configuration
+
+### Default Setup
+
+Expose a postgres DB server with the following features:
+
+- DB name: `devify-magic`
+- server port: `5432`
+- username: `postgres`
+- password: `postgres`
+
 ## Running the app
 
 ```bash
