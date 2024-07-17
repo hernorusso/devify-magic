@@ -8,7 +8,7 @@ export class HousesService {
   constructor(
     @InjectRepository(House) private housesRepository: Repository<House>,
   ) {}
-  findAll() {
+  findAll(): Promise<House[]> {
     return this.housesRepository.find();
   }
 }

@@ -25,7 +25,9 @@ describe('HousesController', () => {
     const findAllMock = () => {
       return [houseMock];
     };
-    jest.spyOn(service, 'findAll').mockImplementation(findAllMock);
+    jest
+      .spyOn(service, 'findAll')
+      .mockReturnValue(Promise.resolve([houseMock]));
     const houses = controller.getHouses();
     expect(houses).toStrictEqual([houseMock]);
   });
