@@ -34,8 +34,6 @@ $ npm install
 
 ## DB configuration
 
-### Default Setup
-
 Expose a postgres DB server with the following features:
 
 - DB name: `devify-magic`
@@ -68,6 +66,10 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## API documentation
+
+`Swagger`: Go to http://localhost:3000/api#/ to explore the API docs
 
 ## Support
 
