@@ -8,6 +8,6 @@ export class HousesController {
 
   @Get()
   getHouses(): Promise<House[]> {
-    return this.housesService.findAll();
+    return this.housesService.find();
   }
 }

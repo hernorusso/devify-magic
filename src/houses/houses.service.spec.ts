@@ -34,7 +34,9 @@ describe('HousesService', () => {
   it('should return houses', async () => {
     const mockedResult = [houseMock];
     jest.spyOn(repository, 'find').mockResolvedValue(mockedResult);
-    const results = await service.findAll();
+
+    const results = await service.find();
+
     expect(repository.find).toHaveBeenCalled();
     expect(results).toStrictEqual(mockedResult);
   });
