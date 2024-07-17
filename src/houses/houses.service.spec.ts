@@ -10,6 +10,7 @@ describe('HousesService', () => {
 
   const mockRepositoryFactory = () => ({
     find: jest.fn(),
+    findOneBy: jest.fn(),
   });
 
   beforeEach(async () => {
@@ -31,13 +32,53 @@ describe('HousesService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should return houses', async () => {
-    const mockedResult = [houseMock];
-    jest.spyOn(repository, 'find').mockResolvedValue(mockedResult);
+  describe('get Houses', () => {
+    it('should return all houses', async () => {
+      const mockedResult = [houseMock];
+      jest.spyOn(repository, 'find').mockResolvedValue(mockedResult);
 
-    const results = await service.find();
+      const results = await service.find();
 
-    expect(repository.find).toHaveBeenCalled();
-    expect(results).toStrictEqual(mockedResult);
+      expect(repository.find).toHaveBeenCalled();
+      expect(results).toStrictEqual(mockedResult);
+    });
+  });
+
+  describe('Get a House by name', () => {
+    it('should be defined', () => {
+      expect(service.findOneBy).toBeDefined();
+    });
+
+    it('should call the repository layer', async () => {
+      jest.spyOn(repository, 'findOneBy').mockResolvedValue(houseMock);
+      await service.findOneBy('name');
+      expect(repository.findOneBy).toHaveBeenCalled();
+    });
+
+    it('should return a house by name', async () => {
+      const mockedResult = houseMock;
+      jest.spyOn(repository, 'findOneBy').mockResolvedValue(mockedResult);
+
+      const result = await service.findOneBy('name');
+
+      expect(result).toBe(mockedResult);
+    });
+
+    it('should throw 404 not found if the requested house does not exist', async () => {
+      const houseName = 'hogwarts';
+      const mockedResult = {
+        message: `The request house: ${houseName} is not found!`,
+        error: 'Not Found',
+        statusCode: 404,
+      };
+
+      jest.spyOn(repository, 'findOneBy').mockResolvedValue(null);
+
+      try {
+        await service.findOneBy(houseName);
+      } catch (err) {
+        expect(err.response).toEqual(mockedResult);
+      }
+    });
   });
 });
