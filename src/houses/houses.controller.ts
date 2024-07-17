@@ -1,7 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { HousesService } from './houses.service';
 import { House } from './house.entity';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiNotFoundResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 @ApiTags('houses')
 @Controller('houses')
 export class HousesController {
@@ -14,5 +14,17 @@ export class HousesController {
   @Get()
   getHouses(): Promise<House[]> {
     return this.housesService.find();
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'Return the required hogwarts house',
+  })
+  @ApiNotFoundResponse({
+    description: 'The request house: `name` is not found!',
+  })
+  @Get(':name')
+  getHouseByName(@Param('name') name: string) {
+    return this.housesService.findOneByName(name);
   }
 }
