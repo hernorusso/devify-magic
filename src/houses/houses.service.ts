@@ -13,7 +13,7 @@ export class HousesService {
     return this.housesRepository.find();
   }
 
-  async findOneBy(name: string): Promise<House> {
+  async findOneByName(name: string): Promise<House> {
     const result = await this.housesRepository.findOneBy({ name });
     if (!result) {
       throw new NotFoundException(`The request house: ${name} is not found!`);

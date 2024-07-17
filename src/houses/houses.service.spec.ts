@@ -46,12 +46,12 @@ describe('HousesService', () => {
 
   describe('Get a House by name', () => {
     it('should be defined', () => {
-      expect(service.findOneBy).toBeDefined();
+      expect(service.findOneByName).toBeDefined();
     });
 
     it('should call the repository layer', async () => {
       jest.spyOn(repository, 'findOneBy').mockResolvedValue(houseMock);
-      await service.findOneBy('name');
+      await service.findOneByName('name');
       expect(repository.findOneBy).toHaveBeenCalled();
     });
 
@@ -59,7 +59,7 @@ describe('HousesService', () => {
       const mockedResult = houseMock;
       jest.spyOn(repository, 'findOneBy').mockResolvedValue(mockedResult);
 
-      const result = await service.findOneBy('name');
+      const result = await service.findOneByName('name');
 
       expect(result).toBe(mockedResult);
     });
@@ -75,7 +75,7 @@ describe('HousesService', () => {
       jest.spyOn(repository, 'findOneBy').mockResolvedValue(null);
 
       try {
-        await service.findOneBy(houseName);
+        await service.findOneByName(houseName);
       } catch (err) {
         expect(err.response).toEqual(mockedResult);
       }
