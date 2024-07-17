@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { houseMock } from './house-mock';
+import { InjectRepository } from '@nestjs/typeorm';
+import { House } from './house.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class HousesService {
-  // TODO: Just incremental development, this should be replaced by DB calls
-  private houses = [houseMock];
-
+  constructor(
+    @InjectRepository(House) private housesRepository: Repository<House>,
+  ) {}
   findAll() {
-    return this.houses;
+    return this.housesRepository.find();
   }
 }
