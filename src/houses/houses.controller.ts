@@ -2,6 +2,7 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { HousesService } from './houses.service';
 import { House } from './house.entity';
 import { ApiNotFoundResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { HouseNameDto } from './dto/house-name.dto';
 @ApiTags('houses')
 @Controller('houses')
 export class HousesController {
@@ -24,7 +25,7 @@ export class HousesController {
     description: 'The request house: `name` is not found!',
   })
   @Get(':name')
-  getHouseByName(@Param('name') name: string) {
-    return this.housesService.findOneByName(name);
+  getHouseByName(@Param() houseNameDto: HouseNameDto) {
+    return this.housesService.findOneByName(houseNameDto);
   }
 }
