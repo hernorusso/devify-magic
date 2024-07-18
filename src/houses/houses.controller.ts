@@ -1,8 +1,9 @@
 import { Controller, Get, Param } from '@nestjs/common';
+import { ApiNotFoundResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { HousesService } from './houses.service';
 import { House } from './house.entity';
-import { ApiNotFoundResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { HouseNameDto } from './dto/house-name.dto';
+
 @ApiTags('houses')
 @Controller('houses')
 export class HousesController {
