@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { HousesService } from './houses.service';
-import { houseMock } from './house-mock';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { HousesService } from './houses.service';
+import { houseExceptionMock, houseMock, houseNameMDtoMock } from './house-mock';
 import { House } from './house.entity';
 
 describe('HousesService', () => {
@@ -51,33 +51,27 @@ describe('HousesService', () => {
 
     it('should call the repository layer', async () => {
       jest.spyOn(repository, 'findOneBy').mockResolvedValue(houseMock);
-      await service.findOneByName('name');
+      await service.findOneByName(houseNameMDtoMock);
       expect(repository.findOneBy).toHaveBeenCalled();
     });
 
     it('should return a house by name', async () => {
-      const mockedResult = houseMock;
-      jest.spyOn(repository, 'findOneBy').mockResolvedValue(mockedResult);
+      jest.spyOn(repository, 'findOneBy').mockResolvedValue(houseMock);
 
-      const result = await service.findOneByName('name');
+      const result = await service.findOneByName(houseNameMDtoMock);
 
-      expect(result).toBe(mockedResult);
+      expect(result).toBe(houseMock);
     });
 
     it('should throw 404 not found if the requested house does not exist', async () => {
       const houseName = 'hogwarts';
-      const mockedResult = {
-        message: `The request house: ${houseName} is not found!`,
-        error: 'Not Found',
-        statusCode: 404,
-      };
-
+      houseExceptionMock.message = `The request house: ${houseName} is not found!`;
       jest.spyOn(repository, 'findOneBy').mockResolvedValue(null);
 
       try {
-        await service.findOneByName(houseName);
+        await service.findOneByName(houseNameMDtoMock);
       } catch (err) {
-        expect(err.response).toEqual(mockedResult);
+        expect(err.response).toEqual(houseExceptionMock);
       }
     });
   });

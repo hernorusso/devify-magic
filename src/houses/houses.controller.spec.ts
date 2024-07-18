@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { NotFoundException } from '@nestjs/common';
 import { HousesController } from './houses.controller';
 import { HousesService } from './houses.service';
-import { houseMock } from './house-mock';
-import { NotFoundException } from '@nestjs/common';
+import { houseExceptionMock, houseMock, houseNameMDtoMock } from './house-mock';
 
 describe('HousesController', () => {
   let controller: HousesController;
@@ -30,11 +30,13 @@ describe('HousesController', () => {
   });
 
   describe('Handle Get all houses', () => {
+    const mockedResult = [houseMock];
+
     it('should be defined', () => {
       expect(controller.getHouses).toBeDefined();
     });
+
     it('should call to the related service', async () => {
-      const mockedResult = [houseMock];
       jest.spyOn(service, 'find').mockResolvedValue(mockedResult);
 
       await controller.getHouses();
@@ -43,13 +45,12 @@ describe('HousesController', () => {
     });
 
     it('should return houses', async () => {
-      const mockedResult = [houseMock];
       jest.spyOn(service, 'find').mockResolvedValue(mockedResult);
 
-      const houses = await controller.getHouses();
+      const result = await controller.getHouses();
 
       expect(service.find).toHaveBeenCalled();
-      expect(houses).toStrictEqual([houseMock]);
+      expect(result).toStrictEqual(mockedResult);
     });
   });
 
@@ -59,38 +60,31 @@ describe('HousesController', () => {
     });
 
     it('should call to the related service', async () => {
-      const houseName = 'hogwarts';
       jest.spyOn(service, 'findOneByName');
 
-      await controller.getHouseByName(houseName);
+      await controller.getHouseByName(houseNameMDtoMock);
 
       expect(service.findOneByName).toHaveBeenCalled();
     });
 
     it('should return the a single house', async () => {
-      const houseName = 'hogwarts';
       jest.spyOn(service, 'findOneByName').mockResolvedValue(houseMock);
 
-      const result = await controller.getHouseByName(houseName);
+      const result = await controller.getHouseByName(houseNameMDtoMock);
 
       expect(result).toEqual(houseMock);
     });
 
     it('Should bubble up Not found service exceptions', async () => {
-      const message = 'Test Exception';
-      const mockedException = {
-        message,
-        error: 'Not Found',
-        statusCode: 404,
-      };
+      const { message } = houseExceptionMock;
       jest.spyOn(service, 'findOneByName').mockImplementation(() => {
         throw new NotFoundException(message);
       });
 
       try {
-        await controller.getHouseByName('houseName');
+        await controller.getHouseByName(houseNameMDtoMock);
       } catch (err) {
-        expect(err.response).toEqual(mockedException);
+        expect(err.response).toEqual(houseExceptionMock);
       }
     });
   });
