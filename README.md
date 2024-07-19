@@ -71,6 +71,13 @@ $ npm run test:cov
 
 `Swagger`: Go to http://localhost:3000/api#/ to explore the API docs
 
+## Technical decisions
+
+### Data relationship
+
+students:houses => many-one. I'll only keep house reference (foreign key) on each student.
+Whenever I would need all the students belonging to a house, I'll query the students controller with a `house-name` filter
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
