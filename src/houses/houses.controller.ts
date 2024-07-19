@@ -26,7 +26,7 @@ export class HousesController {
     description: 'The request house: `name` is not found!',
   })
   @Get(':name')
-  getHouseByName(@Param() houseNameDto: HouseNameDto) {
+  getHouseByName(@Param() houseNameDto: HouseNameDto): Promise<House> {
     return this.housesService.findOneByName(houseNameDto);
   }
 }
