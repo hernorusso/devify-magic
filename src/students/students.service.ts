@@ -13,11 +13,11 @@ export class StudentsService {
     return 'This action adds a new student';
   }
 
-  findAll() {
+  findAll(): Promise<Student[]> {
     return this.studentRepository.find();
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<Student> {
     const result = await this.studentRepository.findOneBy({ id });
 
     if (!result) {
