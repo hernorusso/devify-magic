@@ -14,7 +14,7 @@ export class StudentsService {
   }
 
   findAll() {
-    return `This action returns all students`;
+    return this.studentRepository.find();
   }
 
   findOne(id: number) {
