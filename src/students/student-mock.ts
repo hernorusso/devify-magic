@@ -1,6 +1,7 @@
 const houseNameMock = 'Ravenclaw';
 
 export const studentMock = {
+  id: 'some unique id string',
   name: 'student',
   age: 14,
   bravery: 3,
