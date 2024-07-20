@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
@@ -17,8 +17,14 @@ export class StudentsService {
     return this.studentRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} student`;
+  async findOne(id: string) {
+    const result = await this.studentRepository.findOneBy({ id });
+
+    if (!result) {
+      throw new NotFoundException(`The student with id: ${id} is not found!`);
+    }
+
+    return result;
   }
 
   update(id: number, updateStudentDto: UpdateStudentDto) {
