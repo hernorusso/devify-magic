@@ -5,6 +5,7 @@ describe('StudentsService', () => {
   let service: StudentsService;
 
   beforeEach(async () => {
+    const repositoryMockFactory = () => ({});
     const module: TestingModule = await Test.createTestingModule({
       providers: [StudentsService],
     }).compile();
@@ -14,5 +15,11 @@ describe('StudentsService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  describe('Should get all students', () => {
+    it('should be defined', () => {
+      expect(service.findAll).toBeDefined();
+    });
   });
 });
