@@ -8,6 +8,7 @@ import {
   studentExceptionMock,
   studentMock,
 } from './student-mock';
+import { DeleteResult } from 'typeorm';
 
 describe('StudentsService', () => {
   let service: StudentsService;
@@ -18,6 +19,7 @@ describe('StudentsService', () => {
     findOneBy: jest.fn(),
     create: jest.fn(),
     save: jest.fn(),
+    delete: jest.fn(),
   });
 
   beforeEach(async () => {
@@ -154,6 +156,42 @@ describe('StudentsService', () => {
       try {
         await service.update(idMock, updatedStudentData);
       } catch (err) {
+        expect(err.response).toEqual(studentExceptionMock);
+      }
+    });
+  });
+
+  describe('Remove a Student', () => {
+    it('should be defined', () => {
+      expect(service.remove).toBeDefined();
+    });
+
+    it('Should call the repository layer with specific Student id', () => {
+      const resultMock: DeleteResult = { affected: 1, raw: '' };
+      jest.spyOn(repositoryMock, 'delete').mockResolvedValue(resultMock);
+
+      service.remove(idMock);
+
+      expect(repositoryMock.delete).toHaveBeenCalledWith(idMock);
+    });
+
+    it('should return undefined if student has been deleted', async () => {
+      const resultMock: DeleteResult = { affected: 1, raw: '' };
+      jest.spyOn(repositoryMock, 'delete').mockResolvedValue(resultMock);
+
+      const result = await service.remove(idMock);
+
+      expect(result).toEqual(undefined);
+    });
+
+    it('should raise and exception if the Student is not found', async () => {
+      const resultMock: DeleteResult = { affected: 0, raw: '' };
+      jest.spyOn(repositoryMock, 'delete').mockResolvedValue(resultMock);
+
+      try {
+        await service.remove(idMock);
+      } catch (err) {
+        console.log('here', err.response);
         expect(err.response).toEqual(studentExceptionMock);
       }
     });
