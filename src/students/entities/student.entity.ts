@@ -1,5 +1,4 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { skillRateValues } from '../student-skills.type';
 import { House } from 'src/houses/house.entity';
 
 @Entity()
@@ -14,17 +13,18 @@ export class Student {
   age: number;
 
   @Column()
-  bravery: skillRateValues;
+  bravery: number;
 
   @Column()
-  loyalty: skillRateValues;
+  loyalty: number;
 
   @Column()
-  intelligence: skillRateValues;
+  intelligence: number;
 
   @Column()
-  ambition: skillRateValues;
+  ambition: number;
 
+  @Column({ nullable: true })
   @ManyToOne(() => House)
-  house: string;
+  house: string | null;
 }

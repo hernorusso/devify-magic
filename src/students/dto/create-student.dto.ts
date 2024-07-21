@@ -6,7 +6,6 @@ import {
   Max,
   Min,
 } from 'class-validator';
-import { skillRateValues } from '../student-skills.type';
 import { Type } from 'class-transformer';
 
 export class CreateStudentDto {
@@ -23,26 +22,26 @@ export class CreateStudentDto {
   @Type(() => Number)
   @Min(1)
   @Max(5)
-  bravery: skillRateValues;
+  bravery: number;
 
   @IsNotEmpty()
   @IsNumber()
   @Type(() => Number)
   @Min(1)
   @Max(5)
-  loyalty: skillRateValues;
+  loyalty: number;
 
   @IsNotEmpty()
   @IsNumber()
   @Type(() => Number)
   @Min(1)
   @Max(5)
-  intelligence: skillRateValues;
+  intelligence: number;
 
   @IsNotEmpty()
   @IsNumber()
   @Type(() => Number)
   @Min(1)
   @Max(5)
-  ambition: skillRateValues;
+  ambition: number;
 }
