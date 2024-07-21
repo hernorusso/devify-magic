@@ -2,7 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { StudentsService } from './students.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Student } from './entities/student.entity';
-import { idMock, studentExceptionMock, studentMock } from './student-mock';
+import {
+  idMock,
+  studentDataMock,
+  studentExceptionMock,
+  studentMock,
+} from './student-mock';
 
 describe('StudentsService', () => {
   let service: StudentsService;
@@ -11,6 +16,8 @@ describe('StudentsService', () => {
   const repositoryMockFactory = () => ({
     find: jest.fn(),
     findOneBy: jest.fn(),
+    create: jest.fn(),
+    save: jest.fn(),
   });
 
   beforeEach(async () => {
@@ -82,6 +89,50 @@ describe('StudentsService', () => {
       } catch (err) {
         expect(err.response).toEqual(studentExceptionMock);
       }
+    });
+  });
+
+  describe('Create a Student', () => {
+    it('should be defined', () => {
+      expect(service.create).toBeDefined();
+    });
+
+    it('should create a new Student Object', () => {
+      jest.spyOn(repositoryMock, 'create');
+
+      service.create(studentDataMock);
+
+      expect(repositoryMock.create).toHaveBeenCalled();
+    });
+
+    it('should save the created Student', async () => {
+      jest.spyOn(repositoryMock, 'save');
+
+      await service.create(studentDataMock);
+
+      expect(repositoryMock.save).toHaveBeenCalled();
+    });
+
+    it('Should return the created user', async () => {
+      const createdSTudent = { ...studentMock, house: null };
+      jest.spyOn(repositoryMock, 'save').mockReturnValue(createdSTudent);
+      const result = await service.create(studentDataMock);
+      expect(result).toEqual(createdSTudent);
+    });
+  });
+
+  describe('Update a Student', () => {
+    it('should be defined', () => {
+      expect(service.update).toBeDefined();
+    });
+
+    it.skip('should get the student to update', () => {
+      jest.spyOn(repositoryMock, 'findOneBy').mockResolvedValue(studentMock);
+
+      jest.spyOn(service, 'findOne');
+      // service.update(idMock, studentMock);
+
+      expect(service.findOne).toHaveBeenCalledWith({ id: idMock });
     });
   });
 });
