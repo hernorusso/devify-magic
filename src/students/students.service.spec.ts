@@ -126,13 +126,36 @@ describe('StudentsService', () => {
       expect(service.update).toBeDefined();
     });
 
-    it.skip('should get the student to update', () => {
+    it('should get the student to update', async () => {
       jest.spyOn(repositoryMock, 'findOneBy').mockResolvedValue(studentMock);
 
       jest.spyOn(service, 'findOne');
-      // service.update(idMock, studentMock);
+      await service.update(idMock, studentDataMock);
 
-      expect(service.findOne).toHaveBeenCalledWith({ id: idMock });
+      expect(service.findOne).toHaveBeenCalledWith(idMock);
+    });
+
+    it('Should update and return the selected student', async () => {
+      const updatedStudentData = { ...studentDataMock, age: 15, bravery: 4 };
+      const updatedStudentMock = { ...studentMock, ...updatedStudentData };
+      jest.spyOn(repositoryMock, 'findOneBy').mockResolvedValue(studentMock);
+      jest.spyOn(repositoryMock, 'save').mockResolvedValue(updatedStudentMock);
+
+      const result = await service.update(idMock, updatedStudentData);
+
+      expect(repositoryMock.save).toHaveBeenCalledWith(updatedStudentMock);
+      expect(result).toEqual(updatedStudentMock);
+    });
+
+    it('Should raise and exception is the requested student does not exist', async () => {
+      const updatedStudentData = { ...studentDataMock, age: 15, bravery: 4 };
+      jest.spyOn(repositoryMock, 'findOneBy').mockResolvedValue(null);
+
+      try {
+        await service.update(idMock, updatedStudentData);
+      } catch (err) {
+        expect(err.response).toEqual(studentExceptionMock);
+      }
     });
   });
 });
