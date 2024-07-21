@@ -9,8 +9,11 @@ export class StudentsService {
   constructor(
     @InjectRepository(Student) private studentRepository: Repository<Student>,
   ) {}
-  create(createStudentDto: CreateStudentDto) {
-    return 'This action adds a new student';
+
+  async create(createStudentDto: CreateStudentDto): Promise<Student> {
+    const student = this.studentRepository.create(createStudentDto);
+    const result = await this.studentRepository.save(student);
+    return result;
   }
 
   findAll(): Promise<Student[]> {
