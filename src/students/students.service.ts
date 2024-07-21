@@ -30,8 +30,14 @@ export class StudentsService {
     return result;
   }
 
-  update(id: number, updateStudentDto: UpdateStudentDto) {
-    return `This action updates a #${id} student`;
+  async update(
+    id: string,
+    updateStudentDto: UpdateStudentDto,
+  ): Promise<Student> {
+    const student = await this.findOne(id);
+    const updatedStudent = { ...student, ...updateStudentDto };
+    const result = await this.studentRepository.save(updatedStudent);
+    return result;
   }
 
   remove(id: number) {
