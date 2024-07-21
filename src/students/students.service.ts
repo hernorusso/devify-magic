@@ -40,7 +40,11 @@ export class StudentsService {
     return result;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} student`;
+  async remove(id: string): Promise<void> {
+    const result = await this.studentRepository.delete(id);
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`The student with id: ${id} is not found!`);
+    }
   }
 }
