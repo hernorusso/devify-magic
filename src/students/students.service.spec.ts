@@ -191,7 +191,6 @@ describe('StudentsService', () => {
       try {
         await service.remove(idMock);
       } catch (err) {
-        console.log('here', err.response);
         expect(err.response).toEqual(studentExceptionMock);
       }
     });
