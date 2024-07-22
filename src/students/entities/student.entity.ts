@@ -1,7 +1,14 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 import { House } from 'src/houses/house.entity';
 
 @Entity()
+@Unique(['name']) // TODO:Remove constraint: Uniqueness is not requested in the challenge, but it is added to example that real world use case
 export class Student {
   @PrimaryGeneratedColumn('uuid')
   id: string;

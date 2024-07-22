@@ -11,6 +11,8 @@ export class StudentsService {
   ) {}
 
   async create(createStudentDto: CreateStudentDto): Promise<Student> {
+    // TODO: In case of having a DB unique constraint, like name, we could catch the error here
+    // or check first if the constrained field could be added before saving the new User
     const student = this.studentRepository.create(createStudentDto);
     const result = await this.studentRepository.save(student);
     return result;
