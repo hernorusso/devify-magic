@@ -78,6 +78,10 @@ $ npm run test:cov
 students:houses => many-one. I'll only keep house reference (foreign key) on each student.
 Whenever I would need all the students belonging to a house, I'll query the students controller with a `house-name` filter
 
+### Data retriving strategy
+
+I chose the repository pattern to handle database queries. It's a bit verbose, but it scales better and create a better separation of concerns between the service layer and the model/entity layer. (An alternative for small project is Active Record Pattern)
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
