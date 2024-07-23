@@ -10,17 +10,26 @@ import {
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiConflictResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Student } from './entities/student.entity';
+import { CreateStudentResponseDto } from './dto/created-student-response.dto';
 
 @ApiTags('students')
 @Controller('students')
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
+  @ApiOperation({ description: 'Create a student resource' })
+  @ApiConflictResponse({ description: 'The provided key `name` already exist' })
   @Post()
-  create(@Body() createStudentDto: CreateStudentDto) {
-    console.log(createStudentDto);
+  create(
+    @Body() createStudentDto: CreateStudentDto,
+  ): Promise<CreateStudentResponseDto> {
     return this.studentsService.create(createStudentDto);
   }
 
