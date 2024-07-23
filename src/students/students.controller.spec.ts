@@ -112,4 +112,18 @@ describe('StudentsController', () => {
       );
     });
   });
+
+  describe('Delete a Student', () => {
+    it('should be defined', () => {
+      expect(controller.remove).toBeDefined();
+    });
+
+    it('should call the service layer', () => {
+      jest.spyOn(serviceMock, 'remove');
+
+      controller.remove(idMock);
+
+      expect(serviceMock.remove).toHaveBeenCalledWith(idMock);
+    });
+  });
 });
