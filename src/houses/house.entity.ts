@@ -9,6 +9,6 @@ export class House {
   @Column()
   motto: string;
 
-  @Column()
+  @Column({ name: 'head_of_house' })
   headOfHouse: string;
 }
