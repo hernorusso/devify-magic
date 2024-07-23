@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   Unique,
@@ -31,7 +32,7 @@ export class Student {
   @Column()
   ambition: number;
 
-  @Column({ nullable: true })
   @ManyToOne(() => House)
-  house: string | null;
+  @JoinColumn({ name: 'house_name', referencedColumnName: 'name' })
+  house: House;
 }
