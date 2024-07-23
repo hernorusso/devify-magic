@@ -31,7 +31,7 @@ export class StudentsService {
   }
 
   findAll(): Promise<Student[]> {
-    return this.studentRepository.find();
+    return this.studentRepository.find({ relations: { house: true } });
   }
 
   async findOne(id: string): Promise<Student> {
@@ -53,6 +53,7 @@ export class StudentsService {
   ): Promise<Student> {
     const student = await this.findOne(id);
     const updatedStudent = { ...student, ...updateStudentDto };
+    // TODO: use assignment algorithm to "re locate" the use student based on data update
     const result = await this.studentRepository.save(updatedStudent);
     return result;
   }
