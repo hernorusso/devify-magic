@@ -91,4 +91,25 @@ describe('StudentsController', () => {
       expect(controller.findOne(idMock)).resolves.toEqual(studentMock);
     });
   });
+
+  describe('Update a student by id', () => {
+    it('should be defined', () => {
+      expect(controller.update).toBeDefined();
+    });
+
+    it('should call the service layer', () => {
+      jest.spyOn(serviceMock, 'update');
+
+      controller.update(idMock, studentDataMock);
+
+      expect(serviceMock.update).toHaveBeenCalledWith(idMock, studentDataMock);
+    });
+
+    it('should return the updated student', () => {
+      jest.spyOn(serviceMock, 'update').mockResolvedValue(studentMock);
+      expect(controller.update(idMock, studentDataMock)).resolves.toEqual(
+        studentMock,
+      );
+    });
+  });
 });
