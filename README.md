@@ -70,6 +70,7 @@ $ npm run test:cov
 ## API documentation
 
 `Swagger`: Go to http://localhost:3000/api#/ to explore the API docs
+Documentation is been autogenerate with swagger cli plugin: https://docs.nestjs.com/openapi/cli-plugin#cli-plugin
 
 ## Technical decisions
 
@@ -78,9 +79,14 @@ $ npm run test:cov
 students:houses => many-one. I'll only keep house reference (foreign key) on each student.
 Whenever I would need all the students belonging to a house, I'll query the students controller with a `house-name` filter
 
-### Data retriving strategy
+### Data retrieving strategy
 
 I chose the repository pattern to handle database queries. It's a bit verbose, but it scales better and create a better separation of concerns between the service layer and the model/entity layer. (An alternative for small project is Active Record Pattern)
+
+### Data Validation
+
+Data input will validated with schemas input (dto). In case the user sent extra fields for post or put request, those field will
+stripped out.
 
 ## Support
 
