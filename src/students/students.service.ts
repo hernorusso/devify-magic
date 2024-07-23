@@ -1,20 +1,32 @@
 import { Repository } from 'typeorm';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { Student } from './entities/student.entity';
+import { CreateStudentResponseDto } from './dto/created-student-response.dto';
 @Injectable()
 export class StudentsService {
   constructor(
     @InjectRepository(Student) private studentRepository: Repository<Student>,
   ) {}
 
-  async create(createStudentDto: CreateStudentDto): Promise<Student> {
+  async create(
+    createStudentDto: CreateStudentDto,
+  ): Promise<CreateStudentResponseDto> {
     // TODO: In case of having a DB unique constraint, like name, we could catch the error here
     // or check first if the constrained field could be added before saving the new User
     const student = this.studentRepository.create(createStudentDto);
-    const result = await this.studentRepository.save(student);
+    let result;
+    try {
+      result = await this.studentRepository.save(student);
+    } catch (err) {
+      throw new ConflictException(err.detail);
+    }
     return result;
   }
 

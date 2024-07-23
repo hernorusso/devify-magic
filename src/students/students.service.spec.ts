@@ -9,6 +9,7 @@ import {
   studentMock,
 } from './student-mock';
 import { DeleteResult } from 'typeorm';
+import { ConflictException } from '@nestjs/common';
 
 describe('StudentsService', () => {
   let service: StudentsService;
@@ -120,6 +121,16 @@ describe('StudentsService', () => {
       jest.spyOn(repositoryMock, 'save').mockReturnValue(createdSTudent);
       const result = await service.create(studentDataMock);
       expect(result).toEqual(createdSTudent);
+    });
+
+    it('Should handle an internal server error gracefully', () => {
+      jest
+        .spyOn(repositoryMock, 'save')
+        .mockRejectedValue(new Error('Internal server error'));
+
+      expect(service.create(studentDataMock)).rejects.toThrow(
+        new ConflictException(),
+      );
     });
   });
 
