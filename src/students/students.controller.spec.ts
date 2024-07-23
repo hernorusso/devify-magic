@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { StudentsController } from './students.controller';
 import { StudentsService } from './students.service';
-import { studentMock } from './student-mock';
+import { studentDataMock, studentMock } from './student-mock';
 
 describe('StudentsController', () => {
   let controller: StudentsController;
@@ -47,6 +47,28 @@ describe('StudentsController', () => {
       const result = await controller.findAll();
 
       expect(result).toEqual([studentMock]);
+    });
+  });
+
+  describe('Create a Student', () => {
+    it('should be defined', () => {
+      expect(controller.create).toBeDefined();
+    });
+
+    it('Should call the create method on service with the provided data', () => {
+      jest.spyOn(serviceMock, 'create');
+
+      controller.create(studentDataMock);
+
+      expect(serviceMock.create).toHaveBeenCalledWith(studentDataMock);
+    });
+
+    it('should return the created Student', async () => {
+      jest.spyOn(serviceMock, 'create').mockResolvedValue(studentMock);
+
+      const result = await controller.create(studentDataMock);
+
+      expect(result).toEqual(studentMock);
     });
   });
 });
