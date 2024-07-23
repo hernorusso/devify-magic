@@ -17,7 +17,7 @@ describe('StudentsService', () => {
 
   const repositoryMockFactory = () => ({
     find: jest.fn(),
-    findOneBy: jest.fn(),
+    findOne: jest.fn(),
     create: jest.fn(),
     save: jest.fn(),
     delete: jest.fn(),
@@ -69,15 +69,19 @@ describe('StudentsService', () => {
     });
 
     it('should call the repository layer', () => {
-      jest.spyOn(repositoryMock, 'findOneBy').mockResolvedValue(studentMock);
+      const repositoryCallMock = {
+        where: { id: idMock },
+        relations: { house: true },
+      };
+      jest.spyOn(repositoryMock, 'findOne').mockResolvedValue(studentMock);
 
       service.findOne(idMock);
 
-      expect(repositoryMock.findOneBy).toHaveBeenCalledWith({ id: idMock });
+      expect(repositoryMock.findOne).toHaveBeenCalledWith(repositoryCallMock);
     });
 
     it('Should return a single student', async () => {
-      jest.spyOn(repositoryMock, 'findOneBy').mockResolvedValue(studentMock);
+      jest.spyOn(repositoryMock, 'findOne').mockResolvedValue(studentMock);
 
       const result = await service.findOne(idMock);
 
@@ -85,7 +89,7 @@ describe('StudentsService', () => {
     });
 
     it('should throw 404 not found if the requested student does not exist', async () => {
-      jest.spyOn(repositoryMock, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(repositoryMock, 'findOne').mockResolvedValue(null);
 
       try {
         await service.findOne(idMock);
@@ -140,7 +144,7 @@ describe('StudentsService', () => {
     });
 
     it('should get the student to update', async () => {
-      jest.spyOn(repositoryMock, 'findOneBy').mockResolvedValue(studentMock);
+      jest.spyOn(repositoryMock, 'findOne').mockResolvedValue(studentMock);
 
       jest.spyOn(service, 'findOne');
       await service.update(idMock, studentDataMock);
@@ -151,7 +155,7 @@ describe('StudentsService', () => {
     it('Should update and return the selected student', async () => {
       const updatedStudentData = { ...studentDataMock, age: 15, bravery: 4 };
       const updatedStudentMock = { ...studentMock, ...updatedStudentData };
-      jest.spyOn(repositoryMock, 'findOneBy').mockResolvedValue(studentMock);
+      jest.spyOn(repositoryMock, 'findOne').mockResolvedValue(studentMock);
       jest.spyOn(repositoryMock, 'save').mockResolvedValue(updatedStudentMock);
 
       const result = await service.update(idMock, updatedStudentData);
@@ -162,7 +166,7 @@ describe('StudentsService', () => {
 
     it('Should raise and exception is the requested student does not exist', async () => {
       const updatedStudentData = { ...studentDataMock, age: 15, bravery: 4 };
-      jest.spyOn(repositoryMock, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(repositoryMock, 'findOne').mockResolvedValue(null);
 
       try {
         await service.update(idMock, updatedStudentData);
