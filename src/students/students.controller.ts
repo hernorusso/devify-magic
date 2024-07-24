@@ -6,6 +6,8 @@ import {
   Param,
   Delete,
   Put,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
@@ -16,10 +18,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Student } from './entities/student.entity';
-import { CreateStudentResponseDto } from './dto/created-student-response.dto';
+import { StudentResponseDto } from './dto/response-student.dto';
 
 @ApiTags('students')
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('students')
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
@@ -27,29 +29,32 @@ export class StudentsController {
   @ApiOperation({ description: 'Create a student resource' })
   @ApiConflictResponse({ description: 'The provided key `name` already exist' })
   @Post()
-  create(
+  async create(
     @Body() createStudentDto: CreateStudentDto,
-  ): Promise<CreateStudentResponseDto> {
-    return this.studentsService.create(createStudentDto);
+  ): Promise<StudentResponseDto> {
+    const result = await this.studentsService.create(createStudentDto);
+    return new StudentResponseDto(result);
   }
 
-  @ApiResponse({
-    status: 200,
-    description: 'Return a collection of hogwarts students',
-  })
   @Get()
-  findAll(): Promise<Student[]> {
-    return this.studentsService.findAll();
+  async findAll(): Promise<StudentResponseDto[]> {
+    const results = await this.studentsService.findAll();
+    return results.map((student) => new StudentResponseDto(student));
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.studentsService.findOne(id);
+  async findOne(@Param('id') id: string): Promise<StudentResponseDto> {
+    const result = await this.studentsService.findOne(id);
+    return new StudentResponseDto(result);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateStudentDto: UpdateStudentDto) {
-    return this.studentsService.update(id, updateStudentDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateStudentDto: UpdateStudentDto,
+  ): Promise<StudentResponseDto> {
+    const result = await this.studentsService.update(id, updateStudentDto);
+    return new StudentResponseDto(result);
   }
 
   @Delete(':id')
