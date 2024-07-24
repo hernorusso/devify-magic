@@ -2,7 +2,16 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
 import { HousesController } from './houses.controller';
 import { HousesService } from './houses.service';
-import { houseExceptionMock, houseMock, houseNameMDtoMock } from './house-mock';
+import {
+  houseExceptionMock,
+  houseMock,
+  houseNameMDtoMock,
+  houseNameMock,
+} from './house-mock';
+import { studentMock } from 'src/students/student-mock';
+import { Student } from 'src/students/entities/student.entity';
+import { plainToInstance } from 'class-transformer';
+import { StudentResponseDto } from 'src/students/dto/response-student.dto';
 
 describe('HousesController', () => {
   let controller: HousesController;
@@ -11,6 +20,7 @@ describe('HousesController', () => {
   const houseServiceMockFactory = () => ({
     find: jest.fn(),
     findOneByName: jest.fn(),
+    findStudentsByHouse: jest.fn(),
   });
 
   beforeEach(async () => {
@@ -86,6 +96,41 @@ describe('HousesController', () => {
       } catch (err) {
         expect(err.response).toEqual(houseExceptionMock);
       }
+    });
+  });
+
+  describe('Get Students by house name', () => {
+    it('should be defined', () => {
+      expect(controller.getStudentsByHouseName).toBeDefined();
+    });
+
+    it('should call the service layer', () => {
+      const result = {
+        ...studentMock,
+        house: houseMock,
+      };
+      jest
+        .spyOn(service, 'findStudentsByHouse')
+        .mockReturnValue(Promise.resolve([result]));
+
+      controller.getStudentsByHouseName(houseNameMock);
+
+      expect(service.findStudentsByHouse).toHaveBeenCalledWith(houseNameMock);
+    });
+
+    it('should return a list of students', () => {
+      const resultMock = new StudentResponseDto({
+        ...studentMock,
+        house: houseMock,
+      });
+      const studentsMock = [resultMock];
+      jest
+        .spyOn(service, 'findStudentsByHouse')
+        .mockReturnValue(Promise.resolve([resultMock]));
+
+      expect(
+        controller.getStudentsByHouseName(houseNameMock),
+      ).resolves.toStrictEqual(studentsMock);
     });
   });
 });

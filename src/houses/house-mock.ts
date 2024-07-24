@@ -5,6 +5,7 @@ export const houseMock = {
   name: houseNameMock,
   motto: 'houseMotto',
   headOfHouse: 'houseHead',
+  students: [],
 };
 
 export const houseNameMDtoMock = { name: 'hogwarts' };
