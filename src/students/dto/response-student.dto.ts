@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { House } from 'src/houses/house.entity';
+import { House } from 'src/houses/entities/house.entity';
 
 export class StudentResponseDto {
   id: string;

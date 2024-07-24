@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
-import { House } from 'src/houses/house.entity';
+import { House } from 'src/houses/entities/house.entity';
 
 @Entity()
 @Unique(['name']) // TODO:Remove constraint: Uniqueness is not requested in the challenge, but it is added to example that real world use case

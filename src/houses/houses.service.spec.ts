@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { HousesService } from './houses.service';
 import { houseExceptionMock, houseMock, houseNameMDtoMock } from './house-mock';
-import { House } from './house.entity';
+import { House } from './entities/house.entity';
 
 describe('HousesService', () => {
   let service: HousesService;
