@@ -32,7 +32,7 @@ export class Student {
   @Column()
   ambition: number;
 
-  @ManyToOne(() => House)
+  @ManyToOne(() => House, (house) => house.students)
   @JoinColumn({ name: 'house_name', referencedColumnName: 'name' })
   house: House;
 }
