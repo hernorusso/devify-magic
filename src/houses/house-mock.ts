@@ -1,5 +1,8 @@
+import { studentMock } from 'src/students/student-mock';
+
+export const houseNameMock = 'houseName';
 export const houseMock = {
-  name: 'houseName',
+  name: houseNameMock,
   motto: 'houseMotto',
   headOfHouse: 'houseHead',
 };
@@ -10,4 +13,14 @@ export const houseExceptionMock = {
   message: `The request house: myHouse is not found!`,
   error: 'Not Found',
   statusCode: 404,
+};
+
+export const houseWithStudentsMock = {
+  ...houseMock,
+  students: [
+    {
+      ...studentMock,
+      house: { ...houseMock },
+    },
+  ],
 };
