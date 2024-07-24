@@ -8,16 +8,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { Student } from './entities/student.entity';
-import { CreateStudentResponseDto } from './dto/created-student-response.dto';
 @Injectable()
 export class StudentsService {
   constructor(
     @InjectRepository(Student) private studentRepository: Repository<Student>,
   ) {}
 
-  async create(
-    createStudentDto: CreateStudentDto,
-  ): Promise<CreateStudentResponseDto> {
+  async create(createStudentDto: CreateStudentDto): Promise<Student> {
     // TODO: In case of having a DB unique constraint, like name, we could catch the error here
     // or check first if the constrained field could be added before saving the new User
     const student = this.studentRepository.create(createStudentDto);
