@@ -1,10 +1,18 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Param,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiNotFoundResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { HousesService } from './houses.service';
 import { House } from './entities/house.entity';
 import { HouseNameDto } from './dto/house-name.dto';
+import { StudentResponseDto } from 'src/students/dto/response-student.dto';
 
 @ApiTags('houses')
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('houses')
 export class HousesController {
   constructor(private readonly housesService: HousesService) {}
@@ -28,5 +36,13 @@ export class HousesController {
   @Get(':name')
   getHouseByName(@Param() houseNameDto: HouseNameDto): Promise<House> {
     return this.housesService.findOneByName(houseNameDto);
+  }
+
+  @Get(':name/students')
+  async getStudentsByHouseName(
+    @Param('name') name: string,
+  ): Promise<StudentResponseDto[]> {
+    const students = await this.housesService.findStudentsByHouse(name);
+    return students.map((student) => new StudentResponseDto(student));
   }
 }
