@@ -67,17 +67,42 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Project setup
+
+Run `docker compose up`
+Connect to the database with your db UI interface: it will be exposes at your localhost:5432
+Create a database with the following information:
+
+```
+- DB name: `devify-magic`
+- server port: `5432`
+- username: `postgres`
+- password: `postgres`
+```
+
+Once you create the DB, stop the running container and restart
+`ctrl-c`
+`docker compose up`
+
+inset 4 registers for the houses (`ToDo`: create a migration to accomplish this):
+
+```
+INSERT INTO public.house(
+	name, motto, head_of_house)
+	VALUES
+		('gryffindor', 'gryffindor motto', 'gryffindor head'),
+		('hufflepuff', 'hufflepuff motto', 'hufflepuff head'),
+		('ravenclaw', 'ravenclaw motto', 'ravenclaw head'),
+		('slytherin', 'slytherin motto', 'slytherin head');
+
+```
+
 ## API documentation
 
 `Swagger`: Go to http://localhost:3000/api#/ to explore the API docs
 Documentation is been autogenerate with swagger cli plugin: https://docs.nestjs.com/openapi/cli-plugin#cli-plugin
 
 ## Technical decisions
-
-### Data relationship
-
-students:houses => many-one. I'll only keep house reference (foreign key) on each student.
-Whenever I would need all the students belonging to a house, I'll query the students controller with a `house-name` filter
 
 ### Data retrieving strategy
 
