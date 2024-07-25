@@ -10,6 +10,7 @@ import { HousesService } from './houses.service';
 import { House } from './entities/house.entity';
 import { HouseNameDto } from './dto/house-name.dto';
 import { StudentResponseDto } from 'src/students/dto/response-student.dto';
+import { HouseDto } from './dto/house.dto';
 
 @ApiTags('houses')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -34,8 +35,9 @@ export class HousesController {
     description: 'The request house: `name` is not found!',
   })
   @Get(':name')
-  getHouseByName(@Param() houseNameDto: HouseNameDto): Promise<House> {
-    return this.housesService.findOneByName(houseNameDto);
+  async getHouseByName(@Param('name') name: string): Promise<HouseDto> {
+    const house = await this.housesService.findOneByName(name);
+    return new HouseDto(house);
   }
 
   @Get(':name/students')

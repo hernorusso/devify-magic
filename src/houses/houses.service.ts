@@ -15,8 +15,7 @@ export class HousesService {
     return this.housesRepository.find();
   }
 
-  async findOneByName(houseNameDto: HouseNameDto): Promise<House> {
-    const { name } = houseNameDto;
+  async findOneByName(name: string): Promise<House> {
     const result = await this.housesRepository.findOneBy({ name: ILike(name) });
     if (!result) {
       throw new NotFoundException(`The request house: ${name} is not found!`);

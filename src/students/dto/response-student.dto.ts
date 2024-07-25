@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
-import { House } from 'src/houses/entities/house.entity';
+import { IsOptional } from 'class-validator';
+import { HouseNameDto } from 'src/houses/dto/house-name.dto';
 
 export class StudentResponseDto {
   id: string;
@@ -11,7 +12,8 @@ export class StudentResponseDto {
   ambition: number;
 
   @Transform(({ value }) => value?.name || value)
-  house: House;
+  @IsOptional()
+  house: HouseNameDto;
 
   constructor(partial: Partial<StudentResponseDto>) {
     Object.assign(this, partial);

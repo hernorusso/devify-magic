@@ -2,15 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
 import { HousesController } from './houses.controller';
 import { HousesService } from './houses.service';
-import {
-  houseExceptionMock,
-  houseMock,
-  houseNameMDtoMock,
-  houseNameMock,
-} from './house-mock';
+import { houseExceptionMock, houseMock, houseNameMock } from './house-mock';
 import { studentMock } from 'src/students/student-mock';
-import { Student } from 'src/students/entities/student.entity';
-import { plainToInstance } from 'class-transformer';
 import { StudentResponseDto } from 'src/students/dto/response-student.dto';
 
 describe('HousesController', () => {
@@ -72,7 +65,7 @@ describe('HousesController', () => {
     it('should call to the related service', async () => {
       jest.spyOn(service, 'findOneByName');
 
-      await controller.getHouseByName(houseNameMDtoMock);
+      await controller.getHouseByName(houseNameMock);
 
       expect(service.findOneByName).toHaveBeenCalled();
     });
@@ -80,7 +73,7 @@ describe('HousesController', () => {
     it('should return the a single house', async () => {
       jest.spyOn(service, 'findOneByName').mockResolvedValue(houseMock);
 
-      const result = await controller.getHouseByName(houseNameMDtoMock);
+      const result = await controller.getHouseByName(houseNameMock);
 
       expect(result).toEqual(houseMock);
     });
@@ -92,7 +85,7 @@ describe('HousesController', () => {
       });
 
       try {
-        await controller.getHouseByName(houseNameMDtoMock);
+        await controller.getHouseByName(houseNameMock);
       } catch (err) {
         expect(err.response).toEqual(houseExceptionMock);
       }
@@ -109,9 +102,7 @@ describe('HousesController', () => {
         ...studentMock,
         house: houseMock,
       };
-      jest
-        .spyOn(service, 'findStudentsByHouse')
-        .mockReturnValue(Promise.resolve([result]));
+      jest.spyOn(service, 'findStudentsByHouse').mockResolvedValue([result]);
 
       controller.getStudentsByHouseName(houseNameMock);
 
@@ -119,18 +110,17 @@ describe('HousesController', () => {
     });
 
     it('should return a list of students', () => {
-      const resultMock = new StudentResponseDto({
+      const resultMock = {
         ...studentMock,
         house: houseMock,
-      });
-      const studentsMock = [resultMock];
+      };
       jest
         .spyOn(service, 'findStudentsByHouse')
-        .mockReturnValue(Promise.resolve([resultMock]));
+        .mockResolvedValue([resultMock]);
 
-      expect(
-        controller.getStudentsByHouseName(houseNameMock),
-      ).resolves.toStrictEqual(studentsMock);
+      expect(controller.getStudentsByHouseName(houseNameMock)).resolves.toEqual(
+        [resultMock],
+      );
     });
   });
 });

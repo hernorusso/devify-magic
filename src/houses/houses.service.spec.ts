@@ -4,7 +4,6 @@ import { HousesService } from './houses.service';
 import {
   houseExceptionMock,
   houseMock,
-  houseNameMDtoMock,
   houseNameMock,
   houseWithStudentsMock,
 } from './house-mock';
@@ -60,14 +59,14 @@ describe('HousesService', () => {
 
     it('should call the repository layer', async () => {
       jest.spyOn(repository, 'findOneBy').mockResolvedValue(houseMock);
-      await service.findOneByName(houseNameMDtoMock);
+      await service.findOneByName(houseNameMock);
       expect(repository.findOneBy).toHaveBeenCalled();
     });
 
     it('should return a house by name', async () => {
       jest.spyOn(repository, 'findOneBy').mockResolvedValue(houseMock);
 
-      const result = await service.findOneByName(houseNameMDtoMock);
+      const result = await service.findOneByName(houseNameMock);
 
       expect(result).toBe(houseMock);
     });
@@ -78,7 +77,7 @@ describe('HousesService', () => {
       jest.spyOn(repository, 'findOneBy').mockResolvedValue(null);
 
       try {
-        await service.findOneByName(houseNameMDtoMock);
+        await service.findOneByName(houseName);
       } catch (err) {
         expect(err.response).toEqual(houseExceptionMock);
       }
