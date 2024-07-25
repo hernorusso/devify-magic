@@ -9,7 +9,6 @@ import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { Student } from './entities/student.entity';
 import { houseAssignation, HousePopulation } from './lib/house-assignation';
-import { House } from 'src/houses/entities/house.entity';
 import { HousesService } from 'src/houses/houses.service';
 @Injectable()
 export class StudentsService {
@@ -68,7 +67,7 @@ export class StudentsService {
   }
 
   async houseAssignation(id: string) {
-    // TODO: Refactor and probably encapsulate this in the house entity
+    // TODO: Refactor: encapsulate this in the house entity
     const student = await this.findOne(id);
     const { bravery, loyalty, intelligence, ambition } = student;
     const skillSet = { bravery, loyalty, intelligence, ambition };
@@ -88,15 +87,9 @@ export class StudentsService {
     housesNames.forEach(
       (houseName, index) => (population[houseName] = counters[index]),
     );
-    console.log('population', counters, housesNames, population, skillSet);
     const houseName = houseAssignation(skillSet, population);
-    console.log('houseName', houseName);
 
-    // const house = houses.find(
-    //   (house) => house.name.toLowerCase() === houseName,
-    // );
     const house = await this.houseService.findOneByName(houseName);
-    console.log(house);
     house.students.push(student);
     await this.houseService.update(house);
     return this.findOne(student.id);

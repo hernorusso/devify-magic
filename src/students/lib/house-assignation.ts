@@ -56,7 +56,6 @@ export const houseAssignation = (
     return lessPopulatedHouseCandidates.pop();
   }
 
-  console.log(lessPopulatedHouseCandidates);
   const FIRST_ITEM = 0;
   return lessPopulatedHouseCandidates.sort()[FIRST_ITEM];
 };
