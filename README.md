@@ -26,13 +26,15 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+## Local Project setup
+
+### Installation
 
 ```bash
 $ npm install
 ```
 
-## DB configuration
+### DB configuration
 
 Expose a postgres DB server with the following features:
 
@@ -41,7 +43,7 @@ Expose a postgres DB server with the following features:
 - username: `postgres`
 - password: `postgres`
 
-## Running the app
+### Running the app
 
 ```bash
 # development
@@ -67,22 +69,28 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Project setup
+## Containerized Project setup (app and DB engine)
 
-Run `docker compose up`
-Connect to the database with your db UI interface: it will be exposes at your localhost:5432
-Create a database with the following information:
+Run `docker compose up` in your project root folder.
+Connect to the database with your db UI interface: it will be exposes at your `localhost:5432`
+
+Register a DB server with this info
 
 ```
-- DB name: `devify-magic`
 - server port: `5432`
 - username: `postgres`
 - password: `postgres`
+- hostname: `localhost`
 ```
 
-Once you create the DB, stop the running container and restart
-`ctrl-c`
-`docker compose up`
+Create a database with the following name: `devify-magic`
+
+Once you create the DB, stop the running container and restart from your terminal:
+
+```
+ctrl-c
+docker compose up
+```
 
 inset 4 registers for the houses (`ToDo`: create a migration to accomplish this):
 
@@ -102,6 +110,30 @@ INSERT INTO public.house(
 `Swagger`: Go to http://localhost:3000/api#/ to explore the API docs
 Documentation is been autogenerate with swagger cli plugin: https://docs.nestjs.com/openapi/cli-plugin#cli-plugin
 
+### Usage Examples:
+
+Create a Student: POST `http://localhost:3000/students`
+Body:
+
+```
+{
+    "name": "herno
+    "age": "12",
+    "bravery": 5,
+    "loyalty": 5,
+    "intelligence": 3,
+    "ambition": 4
+}
+```
+
+Note: use postman `raw` with JSON format to use the above JSON
+
+Get all the students: GET `http://localhost:3000/students`
+
+Get all the students in a house: GET `http://localhost:3000/houses/:name/students`
+
+Assign a Student to a house: POST `http://localhost:3000/students/:id/assign-house`
+
 ## Technical decisions
 
 ### Data retrieving strategy
@@ -112,6 +144,51 @@ I chose the repository pattern to handle database queries. It's a bit verbose, b
 
 Data input will validated with schemas input (dto). In case the user sent extra fields for post or put request, those field will
 stripped out.
+The same is done for outgoing data. Is validated with interceptors and DTOs.
+
+## Assignment algorithm
+
+The assignment of a student to a house will follow these rules:
+
+1. Evaluate the highest skill score for the student. If a single highest score exists, the student will be assigned according to it following this config:
+
+```
+{
+ bravery: 'gryffindor',
+ loyalty: 'hufflepuff',
+ intelligence: 'ravenclaw',
+ ambition: 'slytherin',
+ }
+```
+
+2. If a Student has even skills, it will be assigned to any house matching the highest skills. The algorithm will pick the house with fewer students.
+3. Suppose both of the above criteria are not sufficient to make a decision. In that case, the algorithm will select the house alphabetically from those matching the highest Student skills score.
+
+## Business Assumptions
+
+I've assumed that it is a business rule to separate the time to add a student from the time to assign it to a house. That being said, assigning a user is always done by posting to http://localhost:3000/students/:id/assign-house, but it will never happen automatically. However, it could be automated in the student creation and update methods.
+
+## ToDo's list
+
+- Create migrations
+- Move the method to add a student to a house to the house entity
+- Create e2e tests
+- Fix the documented code todo's
+- Improve output schema DTOs
+
+## Development process
+
+This project has been developed incrementally, and there are many places to improve it.
+Iterative, any feature could be added or enhanced.
+
+## Architecture
+
+The project was planed in layers, and the Nest framework guide you in that process:
+
+- Models layer, Repository layer (persistence), service layer (business rules) and controller (presentation and validation)
+- I've tried to keep my self close to the SOLID principles.
+- I've follow best practices to write and also to organize the code.
+- There's many ToDo's documented in the code that will improve it form architectural perspective.
 
 ## Support
 
