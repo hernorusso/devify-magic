@@ -8,10 +8,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { Student } from './entities/student.entity';
+import { houseAssignation, HousePopulation } from './lib/house-assignation';
+import { House } from 'src/houses/entities/house.entity';
+import { HousesService } from 'src/houses/houses.service';
 @Injectable()
 export class StudentsService {
   constructor(
     @InjectRepository(Student) private studentRepository: Repository<Student>,
+    private readonly houseService: HousesService,
   ) {}
 
   async create(createStudentDto: CreateStudentDto): Promise<Student> {
@@ -61,5 +65,40 @@ export class StudentsService {
     if (result.affected === 0) {
       throw new NotFoundException(`The student with id: ${id} is not found!`);
     }
+  }
+
+  async houseAssignation(id: string) {
+    // TODO: Refactor and probably encapsulate this in the house entity
+    const student = await this.findOne(id);
+    const { bravery, loyalty, intelligence, ambition } = student;
+    const skillSet = { bravery, loyalty, intelligence, ambition };
+    const houses = await this.houseService.find();
+
+    const promises = [];
+    const housesNames = [];
+    houses.forEach(async (house, index) => {
+      promises[index] = this.studentRepository.count({
+        where: { house },
+      });
+      housesNames[index] = house.name.toLowerCase();
+    });
+
+    const counters = await Promise.all(promises);
+    const population: HousePopulation = {};
+    housesNames.forEach(
+      (houseName, index) => (population[houseName] = counters[index]),
+    );
+    console.log('population', counters, housesNames, population, skillSet);
+    const houseName = houseAssignation(skillSet, population);
+    console.log('houseName', houseName);
+
+    // const house = houses.find(
+    //   (house) => house.name.toLowerCase() === houseName,
+    // );
+    const house = await this.houseService.findOneByName(houseName);
+    console.log(house);
+    house.students.push(student);
+    await this.houseService.update(house);
+    return this.findOne(student.id);
   }
 }

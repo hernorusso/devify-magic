@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, ILike } from 'typeorm';
 import { House } from './entities/house.entity';
-import { HouseNameDto } from './dto/house-name.dto';
 import { Student } from 'src/students/entities/student.entity';
 
 @Injectable()
@@ -16,7 +15,10 @@ export class HousesService {
   }
 
   async findOneByName(name: string): Promise<House> {
-    const result = await this.housesRepository.findOneBy({ name: ILike(name) });
+    const result = await this.housesRepository.findOne({
+      where: { name: ILike(name) },
+      relations: { students: true },
+    });
     if (!result) {
       throw new NotFoundException(`The request house: ${name} is not found!`);
     }
@@ -34,5 +36,9 @@ export class HousesService {
     }
 
     return house.students;
+  }
+
+  update(house: House) {
+    return this.housesRepository.save(house);
   }
 }

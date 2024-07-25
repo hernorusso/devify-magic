@@ -1,26 +1,23 @@
 type SkillSet = {
-  bravery: number;
-  loyalty: number;
-  intelligence: number;
-  ambition: number;
+  [key: string]: number;
 };
 
-type HousePopulation = {
-  gryffindor: number;
-  hufflepuff: number;
-  ravenclaw: number;
-  slytherin: number;
+export type HousePopulation = {
+  [key: string]: number;
 };
 
+// TODO: Refactor this to a class. It should get a student and a population object
 export const houseAssignation = (
   skillSet: SkillSet,
   housePopulation: HousePopulation,
 ) => {
+  // TODO: Make this criteria Dynamic: get it from the DB
+  // TODO: Also there is a typo: griff should be gryff
   const assignationCriteria = {
-    bravery: 'gryffindor',
-    loyalty: 'hufflepuff',
-    intelligence: 'ravenclaw',
-    ambition: 'slytherin',
+    bravery: 'griff',
+    loyalty: 'huffle',
+    intelligence: 'raven',
+    ambition: 'slyth',
   } as const;
 
   const skills: string[] = [
@@ -59,6 +56,7 @@ export const houseAssignation = (
     return lessPopulatedHouseCandidates.pop();
   }
 
+  console.log(lessPopulatedHouseCandidates);
   const FIRST_ITEM = 0;
   return lessPopulatedHouseCandidates.sort()[FIRST_ITEM];
 };

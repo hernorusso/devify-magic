@@ -56,4 +56,9 @@ export class StudentsController {
   remove(@Param('id') id: string): Promise<void> {
     return this.studentsService.remove(id);
   }
+
+  @Post(':id/assign-house')
+  houseAssignation(@Param('id') id: string) {
+    return this.studentsService.houseAssignation(id);
+  }
 }
