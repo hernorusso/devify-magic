@@ -14,10 +14,10 @@ export const houseAssignation = (
   // TODO: Make this criteria Dynamic: get it from the DB
   // TODO: Also there is a typo: griff should be gryff
   const assignationCriteria = {
-    bravery: 'griff',
-    loyalty: 'huffle',
-    intelligence: 'raven',
-    ambition: 'slyth',
+    bravery: 'gryffindor',
+    loyalty: 'hufflepuff',
+    intelligence: 'ravenclaw',
+    ambition: 'slytherin',
   } as const;
 
   const skills: string[] = [
