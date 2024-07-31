@@ -85,24 +85,21 @@ Register a DB server with this info
 
 Create a database with the following name: `devify-magic`
 
+Run the migrations to create the DB tables and populate the house table: `npm run migration:run`
+
+Check if there are any pending migration: `npm run migration:show`
+if you run the migrations successfully the above command should output like this:
+
+```
+[X] 1 TablesSetup1722372435215
+[X] 2 Fixture1722372479985
+```
+
 Once you create the DB, stop the running container and restart from your terminal:
 
 ```
 ctrl-c
 docker compose up
-```
-
-inset 4 registers for the houses (`ToDo`: create a migration to accomplish this):
-
-```
-INSERT INTO public.house(
-	name, motto, head_of_house)
-	VALUES
-		('gryffindor', 'gryffindor motto', 'gryffindor head'),
-		('hufflepuff', 'hufflepuff motto', 'hufflepuff head'),
-		('ravenclaw', 'ravenclaw motto', 'ravenclaw head'),
-		('slytherin', 'slytherin motto', 'slytherin head');
-
 ```
 
 ## API documentation
@@ -117,7 +114,7 @@ Body:
 
 ```
 {
-    "name": "herno
+    "name": "harry"
     "age": "12",
     "bravery": 5,
     "loyalty": 5,
@@ -189,6 +186,10 @@ The project was planed in layers, and the Nest framework guide you in that proce
 - I've tried to keep my self close to the SOLID principles.
 - I've follow best practices to write and also to organize the code.
 - There's many ToDo's documented in the code that will improve it form architectural perspective.
+
+## Docker useful commands
+
+- access to the shell of the app container: `docker exec -it nest-docker-postgres sh`
 
 ## Support
 
