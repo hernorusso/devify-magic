@@ -13,6 +13,18 @@ export class House {
   @Column({ name: 'head_of_house' })
   headOfHouse: string;
 
+  @Column({ default: false })
+  bravery: boolean;
+
+  @Column({ default: false })
+  loyalty: boolean;
+
+  @Column({ default: false })
+  intelligence: boolean;
+
+  @Column({ default: false })
+  ambition: boolean;
+
   @OneToMany(() => Student, (student) => student.house)
   students: Student[];
 }
