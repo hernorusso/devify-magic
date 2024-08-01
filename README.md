@@ -167,7 +167,6 @@ I've assumed that it is a business rule to separate the time to add a student fr
 
 ## ToDo's list
 
-- Create migrations
 - Move the method to add a student to a house to the house entity
 - Create e2e tests
 - Fix the documented code todo's
