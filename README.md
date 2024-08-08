@@ -43,6 +43,20 @@ Expose a postgres DB server with the following features:
 - username: `postgres`
 - password: `postgres`
 
+### Pass DB config through env vars
+
+`development env`: create a file in the project root with the following name: `.env.development.local`
+
+Add the DB config variables (if you follow the above config) it should be like this:
+
+```
+DB_USER='postgres'
+DB_PASSWORD='postgres'
+DB_HOST='localhost'
+DB_PORT=5432
+DB='devify-magic'
+```
+
 ### Running the app
 
 ```bash
