@@ -1,15 +1,12 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 
-//TODO: this is still use by the migration script. Look some way to replace it by TypeOrmOptionsFactory
-// Meanwhile we could use the dotenv package in this file
-
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: 'postgres',
-  database: 'devify-magic',
+  host: `${process.env.DB_HOST}`,
+  port: +`${process.env.DB_PORT}`,
+  username: `${process.env.DB_USER}`,
+  password: `${process.env.DB_PASSWORD}`,
+  database: `${process.env.DB}`,
   synchronize: false,
   entities: ['dist/**/entities/*.js'],
   migrations: ['dist/**/migrations/*.js'],

@@ -43,9 +43,15 @@ Expose a postgres DB server with the following features:
 - username: `postgres`
 - password: `postgres`
 
+### Supported env files
+
+development: `.env.development.local`,
+test: `.env.test.local`,
+production: `.env.production.local`,
+
 ### Pass DB config through env vars
 
-`development env`: create a file in the project root with the following name: `.env.development.local`
+`development` env: create a file in the project root with the following name: `.env.development.local`
 
 Add the DB config variables (if you follow the above config) it should be like this:
 
@@ -82,6 +88,18 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## Migrations
+
+To run migrations for each environment you should pass the .env file as follow:
+
+`npm run dotenv:run -- [.your.env.file] -- npm run migration:run`
+where `.env.test.local` is your .env config file. You can create a different file for each of your environments. Example: run the migrations for the testing environment:
+`npm run dotenv:run -- .env.test.local -- npm run migration:run`
+
+That way you can run migrations for any desired environment
+
+_Note: Migrations has its own dataSource configuration file. Because configurations are run by typeOrm and not test: `data.source.ts`_
 
 ## Containerized Project setup (app and DB engine)
 
