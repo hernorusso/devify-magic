@@ -58,9 +58,10 @@ Add the DB config variables (if you follow the above config) it should be like t
 ```
 DB_USER='postgres'
 DB_PASSWORD='postgres'
-DB_HOST='localhost'
+DB_HOST='postgres'
 DB_PORT=5432
 DB='devify-magic'
+DB_MIGRATION_HOST='localhost'
 ```
 
 ### Running the app
@@ -117,9 +118,9 @@ Register a DB server with this info
 
 Create a database with the following name: `devify-magic`
 
-Run the migrations to create the DB tables and populate the house table: `npm run migration:run`
+Run the migrations to create the DB tables and populate the house table: `npm run dotenv:run -- [.your.env.file] -- npm run migration:run`
 
-Check if there are any pending migration: `npm run migration:show`
+Check if there are any pending migration: `npm run dotenv:run -- [.your.env.file] -- npm run migration:show`
 if you run the migrations successfully the above command should output like this:
 
 ```
